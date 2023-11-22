@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /usr/local/cumas/bin
+php cumasaccept.php $1

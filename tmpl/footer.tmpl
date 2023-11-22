@@ -1,0 +1,55 @@
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+    <div class="p-3">
+      <h5>Title</h5>
+      <p>Sidebar content</p>
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    Customer's Mail Aggregation System
+    <!-- Default to the left -->
+  </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js"></script>
+
+<!-- DateTimePicker -->
+<script type="text/javascript" src="datetimepicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="datetimepicker/js/locales/bootstrap-datetimepicker.ja.js" charset="UTF-8"></script>
+
+<script src="js/cumas.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+{if isset($_js)}
+<script type="text/javascript" src="js/{$_js}.js"></script>
+{/if}
+
+{if isset($mode_enddaymonth)}
+<script type="text/javascript">
+    $(function(){
+        $("#datetimepicker").datetimepicker({
+            format: 'yyyy/mm/dd hh:ii',
+            language: 'ja',
+            todayBtn: true,
+            startDate: getStartDate(),
+            endDayOfMonthOnlyEnable: {$mode_enddaymonth}
+        });
+    });
+</script>
+{/if}
+
+</body>
+</html>

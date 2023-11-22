@@ -1,0 +1,167 @@
+{include file='header.tmpl' message={$message|default:''} adminFlag=$adminFlag}
+
+ <!-- Navbar -->
+ <nav class="main-header navbar navbar-expand navbar-dark bg-cyan">
+  <!-- Left navbar links -->
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+          <i class="fas fa-bars"></i>
+      </a>
+    </li>
+  </ul>
+</nav>
+<!-- /.navbar -->
+
+<!-- Main -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  
+  <!-- Message -->
+  {if $message != ""}
+  <div class="row justify-content-md-center ml-2 mr-1">
+    <div class="col-12 col-sm-10 col-md8 col-lg-8">
+      <h6 class="mt-2 text-danger text-center">{$message}
+      </h6>
+    </div>
+  </div>
+  {/if}
+  <!-- /.message -->
+  
+  <!-- Content -->
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Card -->
+          <div class="card card-info">
+            <div class="card-header">
+              <h6 class="card-title">新規タスク追加</h6>
+            </div>
+
+            <form name='add' action='task_add.php' method='POST'>
+            
+              <!-- card-body -->
+              <div class="col-sm-10 card-body">
+                <div class="row mt-2">
+                  <label for="inputfor" class="col-sm-3 col-form-label">カテゴリ
+                    <span class="badge badge-danger">必須</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <select name="ca_id" id='category' class="form-control form-control-sm">
+                      <option value="0">----</option>
+                      {foreach from=$category_tab item=list}
+                        <option value="{$list.ca_id}"{if $list.ca_id eq {$smarty.post.ca_id|default}} selected{/if}>{$list.ca_name}</option>
+                      {/foreach}
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <label for="inputfor" class="col-sm-3 col-form-label">担当者</label>
+                  <div class="col-sm-9">
+                    <select name="us_id" id='staff' class="form-control form-control-sm">
+                      <option value="0">----</option>
+                      {foreach from=$user_tab item=list}
+                        <option value="{$list.us_id}"{if $list.us_id eq {$smarty.post.us_id|default}} selected{/if}>{$list.us_name}</option>
+                      {/foreach}
+                    </select>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <label for="inputfor" class="col-sm-3 col-form-label">繰り返しモード
+                    <span class="badge badge-danger">必須</span>
+                  </label>
+                  <div class="col-sm-9 mt-2">
+                    <div class="form-check form-check-inline">
+                      {if $tag.ta_repmode == "0"}
+                        <input class="form-check-input" type="radio" name="ta_repmode" value="0" checked onClick="changeLoopMode(0)">
+                      {else}
+                        <input class="form-check-input" type="radio" name="ta_repmode" value="0" onClick="changeLoopMode(0)">
+                      {/if}
+                      <label class="form-check-label">繰り返さない</label>
+                    </div>
+                    <div class="form-check form-check-inline ml-4">
+                      {if $tag.ta_repmode == "1"}
+                        <input class="form-check-input" type="radio" name="ta_repmode" value="1" checked onClick="changeLoopMode(1)">
+                      {else}
+                        <input class="form-check-input" type="radio" name="ta_repmode" value="1" onClick="changeLoopMode(1)">
+                      {/if}
+                      <label class="form-check-label">毎週</label>
+                    </div>
+                    <div class="form-check form-check-inline ml-4">
+                      {if $tag.ta_repmode == "2"}
+                        <input class="form-check-input" type="radio" name="ta_repmode" value="2" checked onClick="changeLoopMode(2)">
+                      {else}
+                        <input class="form-check-input" type="radio" name="ta_repmode" value="2" onClick="changeLoopMode(2)">
+                      {/if}
+                      <label class="form-check-label">毎月</label>
+                    </div>
+                    <div class="form-check form-check-inline ml-4">
+                      {if $tag.ta_repmode == "3"}
+                        <input class="form-check-input" type="radio" name="ta_repmode" value="3" checked onClick="changeLoopMode(3)">
+                      {else}
+                        <input class="form-check-input" type="radio" name="ta_repmode" value="3" onClick="changeLoopMode(3)">
+                      {/if}
+                      <label class="form-check-label">毎月末</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <label for="inputfor" class="col-sm-3 col-form-label">初回登録日時
+                    <span class="badge badge-danger">必須</span>
+                  </label>
+                  <div id="datetimepicker" class="col-sm-4 input-append date input-datetime">
+                    <input type="text" name='ta_post' class="form-control form-control-sm" value="{$tag.ta_post|default}" placeholder="yyyy/mm/dd mm:hh" autocomplete="off">
+                      <span class="add-on"><i class="icon-th"></i></span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <label for="inputfor" class="col-sm-3 col-form-label">件名
+                    <span class="badge badge-danger">必須</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <input type="text" name="ta_subject" class="form-control form-control-sm cumas-input-sm" value="{$tag.ta_subject|default}" autocomplete="off">
+                  </div>
+                </div>
+                <div class="row">
+                  <label for="inputfor" class="col-sm-3 col-form-label">内容
+                    <span class="badge badge-danger">必須</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <textarea name="ta_body" class="form-control" rows="4">{$tag.ta_body|default}</textarea>
+                  </div>
+                </div>
+                <div class="row mt-1 mb-4">
+                  <label for="inputfor" class="col-sm-3 col-form-label">備考</label>
+                  <div class="col-sm-9">
+                    <textarea name='ta_comment' class='form-control' rows="2">{$tag.ta_comment|default}</textarea>
+                  </div>
+                </div>
+              </div>
+              <!-- /card-body -->
+              
+              <div class="row mb-4 text-center">
+                <div class="col-sm-12">
+                  <button type="submit" name="add" class="btn btn-primary btn-sm">登録
+                  </button>
+                  <button type="submit" name="return" class="btn btn-secondary btn-sm">キャンセル
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.content -->
+</div>
+<!-- /.main -->
+
+{include file='footer.tmpl' _js="task"}

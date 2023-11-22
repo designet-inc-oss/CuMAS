@@ -1,0 +1,347 @@
+html,
+body {
+    overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+body {
+    padding-top: 56px;
+    font: 84%/1 ヒラギノ角ゴ pro w3,hiragino kaku gothic pro,メイリオ,Meiryo,ＭＳ Ｐゴシック,Osaka,sans-serif !important;
+    /* line-height: 1.6 !important; */
+}
+
+@media (max-width: 767.98px) {
+  .offcanvas-collapse {
+    position: fixed;
+    top: 56px; /* Height of navbar */
+    bottom: 0;
+    left: 100%;
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 3rem;
+    overflow-y: auto;
+    visibility: hidden;
+    background-color: white;
+    transition: visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
+    transition: transform .3s ease-in-out, visibility .3s ease-in-out;
+    transition: transform .3s ease-in-out, visibility .3s ease-in-out, -webkit-transform .3s ease-in-out;
+  }
+  .offcanvas-collapse.open {
+    visibility: visible;
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+
+  .top-nav-link-first {
+      margin-top:35px!important;
+  }
+
+  .top-nav-link {
+      height: 50px;
+  }
+  .top-nav-underline {
+      height: 35px;
+  }
+    .cumas-top-link {
+        display: inline-block !important;
+    }
+    .cumas-btn-sm {
+        width: 20em;
+        text-align: left;
+    }
+    .detail-header {
+        margin-left: 0px !important;
+    }
+}
+
+.navbar {
+    padding: 0px !important;
+}
+
+#top-menu{
+    padding-top: 0px!important;
+}
+
+.cumas-top-link {
+    display: none;
+}
+
+.nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 68px;
+    overflow-y: hidden;
+    margin-top: -16px;
+}
+
+.nav-scroller2 {
+  position: relative;
+  z-index: 2;
+  height: 20px;
+  overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  padding-bottom: 1rem;
+  padding-top: 20px;
+  margin-top: -1px;
+  overflow-x: auto;
+  color: rgba(255, 255, 255, .75);
+  text-align: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-underline .nav-link {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: .875rem;
+  color: #6c757d;
+}
+
+.nav-underline .nav-link:hover {
+  color: #007bff;
+}
+
+.nav-underline .active {
+  font-weight: 500;
+  color: #343a40;
+}
+
+.text-white-50 { color: rgba(255, 255, 255, .5); }
+
+.bg-purple { background-color: #6f42c1; }
+
+.lh-100 { line-height: 1; }
+.lh-125 { line-height: 1.25; }
+.lh-150 { line-height: 1.5; }
+
+.cusmas-tbl table {
+    border: ridge 1px #778899 !important;
+    empty-cells: show !important;
+}
+.cusmas-tbl th {
+    background-color: #E0FFFF !important;
+    border: ridge 1px #778899 !important;
+}
+.cusmas-tbl td {
+    border: ridge 1px #778899 !important;
+}
+.cumas-tbl2 th {
+    background-color: #E0FFFF !important;
+    border: ridge 1px #778899 !important;
+}
+.head-title {
+    color: #fff !important;
+    background-color: #B0C4DE;
+    font-weight: bold;
+    border: 1px solid rgba(0, 123, 255, .2) !important;
+}
+.cumas-btn1 {
+   font-size: 13px !important; 
+   width: 80px !important;
+}
+
+.cusmas-btn{
+    background-color: #2b7de9 !important;box-shadow: 0 1px 2px 0 rgba(66,133,244,0.3),0 1px 3px 1px rgba(66,133,244,0.15); color: #fff;
+}
+
+.cumas-btn2 {
+   /* font-size: 13px !important; */
+   width: 120px !important;
+}
+
+#mail-attach-file {
+    border: ridge gainsboro;
+    padding: 3px;
+    background-color: white;
+    overflow: auto;
+    resize: both;
+}
+
+#mailBody {
+    border: ridge gainsboro;
+    padding: 3px;
+    background-color: white;
+    overflow: auto;
+    min-height: 200px;
+    resize: both;
+    margin-top: -16px;
+}
+.mail-subject{
+    border: ridge gainsboro !important;
+    padding: 3px;
+    background-color: white;
+    overflow: auto;
+    resize: both;
+}
+
+.mailList tr.selectedMail {
+    background-color: #D3D3D3 !important;
+}
+
+.mailList {
+    border: ridge 2px;
+    background-color: white;
+    overflow: auto;
+}
+.word-wrap {
+    word-wrap: break-word; word-break: break-word;
+}
+.top-nav-link {
+    height: 35px;
+}
+.top-nav-underline {
+    height: 35px;
+}
+.cumas_title {
+    height: 45px;
+}
+.cumas-form-label {
+    font-weight: bold;
+    color: #006ab8;
+}
+
+.contact-add-detail {
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid #7eb3db;
+    background-color:white;
+}
+
+.select-checkbox {
+    border:2px solid #ccc;
+    height: 100px;
+    overflow-y: scroll;
+}
+#every-month {
+    display: none;
+}
+
+#every-week{
+    display: none;
+}
+.message{
+    color: red;
+    font-size: 1em; 
+}
+
+div#addButton {
+    position: relative;
+    height: 50px;
+    width: 125px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("../images/category_add.png");
+}
+
+#copyright-area {
+    border-top: 1px solid #66a6d4;
+    background-color: #006ab8;
+    color: white;
+}
+
+.sleeper {
+    text-align: center;
+    color: lightgray;
+}
+.mail-head {
+    margin-top: -8px;
+}
+.btn {
+    font-size: .9em !important; 
+}
+.cumas-input{
+}
+
+label.cumas-required:after {
+  margin-left: 1.0em;
+  padding: 0px 6px 0px 6px;
+  border-radius: 4px;
+  font-size: 0.7em;
+  color: white;
+  background-color: #C44;
+  content: "必須";
+}
+.cumas-icon{
+    border-color: white!important;
+}
+
+#mode-noloop {
+    display: none;
+}
+
+#mode-week {
+    display: none;
+}
+
+#mode-month {
+    display: none;
+}
+
+#mode-endmonth {
+    display: none;
+}
+
+#label-mode-noloop,
+#label-mode-week,
+#label-mode-month,
+#label-mode-endmonth {
+    display: none;
+}
+
+.input-cumas {
+    font-size: 0.825rem!important;
+}
+
+.sm-header{
+    background-color: #C0C0C0;
+    height: 80px;
+    line-height: 22px;
+}
+
+.modal-header {
+    border-bottom: none !important;
+}
+
+.modal-footer {
+    border-top: none !important;
+}
+
+#mailList td, #mailAttach, .row-detail-h {
+    font-size: 85%;
+}
+
+#mailList tr.selectedMail {
+    background-color: #D3D3D3;
+}
+
+.cumas-input-sm {
+    font-size: 95%;
+}
+
+.row-detail-h {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.5 !important;
+    margin-bottom: 0.125rem !important;
+}
+
+.row-detail-h2 {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    font-size: 85%;
+    line-height: 1.5 !important;
+}
+
+.detail-header {
+    margin-left: -48px;
+}
+.word-break {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}

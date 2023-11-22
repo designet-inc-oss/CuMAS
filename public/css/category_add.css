@@ -1,0 +1,19 @@
+div#addCategoryTable {
+  width: 50%;
+}
+
+#addCategoryTable th.passwd { font-size: small; }
+
+#buttons {
+  padding-top: 10px;
+  text-align: center;
+}
+#buttons input {
+  width: 100px;
+}
+
+input[type="text"] {
+  width: 90%;
+  height: 80%;
+}
+

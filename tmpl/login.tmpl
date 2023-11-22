@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>お問い合わせシステム</title>
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap-4.5.2-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
+  </head>
+  <body class="text-center">
+    <div class="form-signin">
+    <form  method="POST" action="login.php">
+      <p class="h5 mb-3 font-weight-bold login-title">メールお問い合わせ管理システム</hp>
+      <div class="message mb-3">{$message|default:''}</div>
+      <label for="inputUsername" class="sr-only">ユーザ名</label>
+      <input type="text" id="username" class="form-control" name="username" placeholder="ユーザ名" autofocus autocomplete="off">
+      <label for="inputPassword" class="sr-only">パスワード</label>
+      <input type="password" id="inputPassword" class="form-control mt-1" name="password"  placeholder="パスワード" autocomplete="off">
+      <input type="submit" class="btn btn-primary btn-block mt-2" type="submit" name="login" value="ログイン">
+    </form>
+    </div>
+  </body>
+</html>

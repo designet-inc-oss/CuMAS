@@ -1,0 +1,221 @@
+{include file='header.tmpl' message={$message|default} adminFlag=$adminFlag _css="contact_search_result"}
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-dark bg-cyan">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="contact_search.php" class="nav-link">案件検索</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="contact_add.php" class="nav-link">案件追加</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="#" class="nav-link" onClick="reset();">状態のリセット</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="contact_search_result.php" class="nav-link">再表示</a>
+      </li>
+    </ul>
+
+    <form class="form-inline ml-auto" name='formCategory' method='post' action='contact_search_result.php'>
+      <ul class="navbar-nav">
+        <li class="nav-item">カテゴリー</li>
+      </ul>
+      <select class="form-control form-control-navbar bg-light" id='selectCategory' name="select_ca_id" onChange="this.form.submit()">
+        <option value="0">----</option>
+        {foreach from=$category_tab item=list}
+          <option value="{$list.ca_id}"{if $list.ca_id eq {$sql_ca_id}} selected{/if}>
+            {$list.ca_name}
+           </option>
+        {/foreach}
+      </select>
+    </form>
+  </nav>
+  <!-- /.navbar -->
+
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+          {if !empty($total)}
+            <h5 class="m-0 text-gray-dark">案件一覧({$total}件)</h5>
+          {else}
+            <h5 class="m-0 text-gray-dark">案件一覧(0件)</h5>
+          {/if}
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Message -->
+    {if !empty($message)}
+    <div class="row justify-content-md-center mb-1">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-center">
+        <h6 id="message" class="mt-2 text-danger">{$message nofilter}</h6>
+      </div>
+    </div>
+    {/if}
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-3 ml-auto">
+
+            <!-- pagenation -->
+            <ul class="pagination float-right">
+              <li class="page-item">
+                <a href='#' class="page-link" onClick='pageJump(1)'>&laquo;</a>
+              </li>
+
+              {if $pageNum < 3  }
+                {assign var="start" value=1}
+                {assign var="count" value=5}
+              {else}
+                {assign var="start" value=$pageNum - 2}
+                {assign var="count" value=$pageNum + 2}
+              {/if}
+
+              {if $count > $pageTotal  }
+                {assign var="count" value=$pageTotal}
+              {/if}
+
+              {for $page=$start to $count}
+                {if $page == $pageNum }
+                <li class="page-item active">
+                  <a href='#' class="page-link" onClick='pageJump({$page})'>{$page}</a>
+                </li>
+                {else}
+                <li class="page-item">
+                  <a href='#' class="page-link" onClick='pageJump({$page})'>{$page}</a>
+                </li>
+                {/if}
+              {/for}
+
+              <li class="page-item">
+                <a href='#' class="page-link" onClick='pageJump({$pageTotal})'>&raquo;</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- end pagenation -->
+
+        <div class="row">
+          <div class="col-md-12">
+
+            <!-- card -->
+            <div class="card">
+
+              <!-- card-body -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-md text-gray-dark">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th style="width: 150px">問い合わせ日時</th>
+                      <th>件名</th>
+                      <th>送信者</th>
+                      <th style="width: 100px">担当者</th>
+                      <th style="width: 165px">ステータス</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+{section name=row loop=$searchResults}
+                    <tr style="cursor : pointer;" onClick="toDetail({$searchResults[row].co_id});">
+{if $searchResults[row].co_child_no == NULL}
+                      <td>{$searchResults[row].co_parent}</td>
+{else}
+                      <td>
+{$searchResults[row].co_parent}.{$searchResults[row].co_child_no}</td>
+{/if}
+
+                      <td>{$searchResults[row].co_inquiry}</td>
+                      <td>
+                        {if $searchResults[row].co_child_no != 0}┗
+                        {/if}
+                        {$searchResults[row].ma_subject}
+                      </td>
+                      <td>{$searchResults[row].ma_from_addr}</td>
+{if $searchResults[row].us_active === true}
+                      <td class='user'>{$searchResults[row].us_name}</td>
+{else}
+                      <td class='sleeper'>{$searchResults[row].us_name}</td>
+{/if}
+                      <td style="color: {$searchResults[row].st_color}; font-size: 0.8em">
+{$searchResults[row].st_status}
+{if $searchResults[row].co_limit != null}
+                          <span>({$searchResults[row].co_limit})<span>
+{/if}
+                      </td>
+                    </tr>
+{/section}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+          </div>
+          <div class="col-md-3 ml-auto">
+            <!-- pagenation -->
+            <ul class="pagination float-right">
+              <li class="page-item">
+                <a href='#' class="page-link" onClick='pageJump(1)'>&laquo;</a>
+              </li>
+
+            {if $pageNum < 3  }
+              {assign var="start" value=1}
+              {assign var="count" value=5}
+            {else}
+              {assign var="start" value=$pageNum - 2}
+              {assign var="count" value=$pageNum + 2}
+            {/if}
+
+            {if $count > $pageTotal  }
+              {assign var="count" value=$pageTotal}
+            {/if}
+
+            {for $page=$start to $count}
+              {if $page == $pageNum }
+              <li class="page-item active">
+                <a href='#' class="page-link" onClick='pageJump({$page})'>{$page}</a>
+              </li>
+              {else}
+              <li class="page-item">
+                <a href='#' class="page-link" onClick='pageJump({$page})'>{$page}</a>
+              </li>
+              {/if}
+            {/for}
+
+              <li class="page-item">
+                <a href='#' class="page-link" onClick='pageJump({$pageTotal})'>&raquo;</a>
+              </li>
+            </ul>
+          </div>
+        <!-- end pagenation -->
+
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <form name='pageStatus' action='contact_search_result.php' method='POST'>
+    <input type='hidden' name='pageNum' value='{$pageNum}'></input>
+    <input type='hidden' name='selectedJob' value=''></input>
+  </form>
+
+
+{include file='footer.tmpl' _js="contact_search_result"}

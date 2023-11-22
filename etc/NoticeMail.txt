@@ -1,0 +1,15 @@
+From: 遅延ジョブ通知システム <noreply@localhost.localdomain>
+Subject: 【お問い合わせ管理】遅延対応のご連絡
+
+    以下のお問い合わせは、進捗が「{$status}」の状態になってから
+    {$latedays}日以上が経過しています。
+
+    カテゴリ        ：	{$category}
+    お問い合わせ番号：	{$contact_no}
+    顧客アドレス    ：	{$sender}
+    サブジェクト    ：	{$subject}
+    主担当者        ：	{$user}
+    依頼日時        ：	{$inquiry}
+    最終更新日時    ：	{$lastupdate}
+    対応予定日      ：	{$limit}
+    URL             ：	http://example.com/contact_detail.php?id={$co_id}

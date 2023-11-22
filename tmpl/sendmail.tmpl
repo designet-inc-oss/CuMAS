@@ -1,0 +1,166 @@
+{include file='header.tmpl' _css="sendmail" message={$message|default:''} }
+ 
+ <!-- Navbar -->
+ <nav class="main-header navbar navbar-expand navbar-dark bg-cyan">
+  <!-- Left navbar links -->
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+          <i class="fas fa-bars"></i>
+      </a>
+    </li>
+  </ul>
+</nav>
+<!-- /.navbar -->
+
+<!-- Main -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Modal -->
+    <div class="modal fade" id="cfgSendMail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">確認</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body message">
+            メールを送信しますが、よろしいでしょうか?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+            <button type="button" class="btn btn-primary" onclick="sendmail('sendmail')">送信</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./Modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="cfgClear" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">確認</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body message">
+            入力している内容は破棄されます。よろしいですか？
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
+            <button type="button" class="btn btn-primary" onclick="sendmail('init')">はい</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./Modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="cfgCancel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">確認</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body message">
+          キャンセルしますが、よろしいでしょうか?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">いいえ</button>
+            <button type="button" class="btn btn-primary" onclick="sendmail('return')">はい</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ./Modal -->
+    {if $message != ""}
+	<div class="row justify-content-md-center ml-2 mr-1">
+      <div class="col-12 col-sm-10 col-md8 col-lg-8">
+          <h6 class="mt-2 text-danger text-center">{$message}</h6>
+      </div>
+    </div>
+    {/if}
+	
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Card -->
+          <div class="card card-info">
+            <div class="card-header">
+              <h6 class="card-title">メール返信</h6>
+            </div>
+            
+            <form id="form-sendmail" name='add' action='sendmail.php' method='POST'>
+            
+              <!-- Card-body -->
+              <div class="col-sm-10 card-body">
+              
+                <div class="row mt-2">
+                  <label for="inputfor" class="col-sm-3 col-form-label">差出人</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control-sm form-control-plaintext" value="{$fromaddr}" readonly >
+                  </div>
+                </div>
+                <div class="row">
+                  <label for="inputfor" class="col-sm-3 col-form-label">宛先<span class="badge badge-danger">必須</span></label>
+                  <div class="col-sm-9">
+                    <input type="text" name="mailTo" class="form-control form-control-sm" value="{$mailTo}" autocomplete="off">
+                  </div>
+                </div>
+                <div class="row">
+                  <label for="inputfor" class="col-sm-3 col-form-label">Cc</label>
+                  <div class="col-sm-9">
+                    <input type="text" name="mailCc" class="form-control form-control-sm" value="{$mailCc}" autocomplete="off">
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <label for="inputfor" class="col-sm-3 col-form-label">件名<span class="badge badge-danger">必須</span></label>
+                  <div class="col-sm-9">
+                    <input type="text" name='subject' class="form-control form-control-sm" value="{$subject}" autocomplete="off">
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <label for="inputfor" class="col-sm-3 col-form-label">本文</label>
+                  <div class="col-sm-9">
+                    <textarea name="body" class="form-control" rows="20">{$body}</textarea>
+                  </div>
+                </div>
+                <div class="row mb-1 text-right mt-1">
+                  <div class="col-sm-12">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="confirmSendmail()">送信</button>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="confirmClear()">クリア</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="confirmCancel()">キャンセル</button>
+                  </div>
+                </div>
+              </div>
+              <!-- ./card-body -->
+              <input name="selectedMail" value="{$selectedMail}" type="hidden">
+            </form>
+          </div>
+          <!-- ./card -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ./content -->
+</div>
+<!-- ./main -->
+
+{include file='footer.tmpl' _js="sendmail"}

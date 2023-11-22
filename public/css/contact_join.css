@@ -1,0 +1,52 @@
+#main { width: 95%; }
+
+#src {
+  border: outset orange 8px;
+  background-color: darkorange;
+  padding: 3px;
+}
+#dest {
+  border: outset greenyellow 8px;
+  background-color: yellowgreen;
+  padding: 3px;
+}
+
+td { background-color: white; }
+
+#joinDetail th,td { font-size: 90%; }
+#id { width: 40px; font-size: medium; }
+#inquiry { width: 120px; }
+#subject { width: 350px; }
+#from { width: 20%; }
+#user { width: 120px; }
+#status { width: 100px; }
+
+.id { text-align: right; }
+.inquiry { text-align: center; }
+.from { word-break: break-all; }
+
+caption {
+  background-color: white;
+  padding: 2px;
+  font-size: large;
+  font-weight: bold;
+  white-space: nowrap;
+  float: left;
+}
+
+#arrow {
+  position: relative;
+  background-image: url("../images/arrow.png");
+  background-repeat: no-repeat;
+  padding: 5px;
+  left: 400px;
+  height: 40px;
+  width: 168px;
+  text-indent: -9999px;
+}
+
+.buttons {
+  text-align: center;
+  padding: 5px;
+}
+.buttons input { width: 100px; }

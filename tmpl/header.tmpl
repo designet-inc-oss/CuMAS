@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+  <title>CuMAS 問い合わせ管理</title>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+
+  <!-- DateTimePicker -->
+  <link href="datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+  <link href="datetimepicker/css/bootrap4.5.css" rel="stylesheet" media="screen">
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-light-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="contact_search_result.php" class="brand-link bg-cyan">
+      <span class="brand-text font-weight-bold">CuMAS</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+             <i class="far fa-user"></i>
+              <p>
+                {$userName}
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="user_setting.php" class="nav-link">
+                  <i class="fas fa-address-card"></i>
+                  <p>プロフィール設定</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link" onClick='logout();'>
+                  <i class="fas fa-sign-out-alt"></i>
+                  <p>ログアウト</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Sidebar Menu -->
+          <li class="nav-item">
+            <a href="./contact_search_result.php" class="nav-link">
+              <i class="fas fa-search"></i>
+              <p>案件一覧</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="./task_list.php" class="nav-link">
+              <i class="fas fa-tasks"></i>
+              <p>タスク一覧</p>
+            </a>
+          </li>
+
+<!--
+{if $adminFlag}
+-->
+          <li class="nav-item">
+            <a href="./category_list.php" class="nav-link">
+              <i class="fas fa-th"></i>
+              <p>カテゴリ一覧</p>
+            </a>
+          </li>
+<!--
+{/if}
+-->
+
+<!--
+{if $adminFlag}
+-->
+          <li class="nav-item">
+            <a href="./user_list.php" class="nav-link">
+              <i class="fas fa-users"></i>
+              <p>担当者一覧</p>
+            </a>
+          </li>
+<!--
+{/if}
+-->
+        </ul>
+      </div>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+

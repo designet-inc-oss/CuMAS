@@ -1,0 +1,17 @@
+td { background-color: white; }
+
+#mailDetail {
+  border: outset darkgray;
+  padding: 5px;
+}
+
+.id { text-align: right; }
+.inquiry { text-align: center; }
+.from { word-break: break-all; }
+
+
+.buttons {
+  text-align: center;
+  padding: 5px;
+}
+.buttons input { width: 100px; }

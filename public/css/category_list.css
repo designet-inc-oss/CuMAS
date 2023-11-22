@@ -1,0 +1,32 @@
+div#addButton {
+    position: relative;
+    height: 50px;
+    width: 125px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("../images/category_add.png");
+}
+#addButton a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#main table {
+    width: 80%;
+    table-layout: fixed;
+}
+#main td { word-break: break-all; }
+tr.oddRow { background-color: snow; }
+tr.evenRow { background-color: white; }
+
+.categoryName {
+    //width: 150px;
+}
+.categoryIdent {
+    width: 150px;
+}
+.actFlag { width:90px; }
+.modCol { width:53px; }
+
+td.flag { text-align: center; }

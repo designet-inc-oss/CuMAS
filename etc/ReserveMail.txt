@@ -1,0 +1,15 @@
+From: 遅延ジョブ通知システム <noreply@localhost.localdomain>
+Subject: 【お問い合わせ管理】タスク作成のご連絡
+
+    以下のタスクが作成されました。
+
+    登録者名            : {$operatorname}
+    登録者メールアドレス: {$operatoraddr}
+    カテゴリ            ：{$category}
+    お問い合わせ番号    : {$co_id}
+    件名                : {$subject}
+    主担当者            ：{$user}
+    依頼日時            ：{$inquiry}
+    内容		: {$body}
+    備考                : {$comment} 
+    URL                 ：http://example.com/contact_detail.php?id={$co_id}

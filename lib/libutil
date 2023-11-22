@@ -1,0 +1,424 @@
+<?php
+
+define("DB_TIMESTAMP_FMT", "Y-m-j H:i:s");
+define("DB_TA_POST_FMT",   "Y-m-j H:i");
+define("DB_TA_DATE_FMT",   "Y-m-j");
+
+/* 複数メールアドレスの区切り文字列*/
+define("DELIMIRER_MAIL", ",");
+
+/**
+ * 日付の形式をチェックする
+ */
+function check_fmt_date($str)
+{
+    /* 「/」で分析 */
+    $arr_ymd = explode("/", $str);
+    if (count($arr_ymd) !== 3) {
+        return false;
+    }
+
+    /* 日付のチェック */
+    $ret = checkdate($arr_ymd[1], $arr_ymd[2], $arr_ymd[0]);
+    if ($ret === false) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * 「d日 hh:mm」の形式をチェックする
+ */
+function check_fmt_every_month($str)
+{
+    /* 「 」で分析 */
+    $arr_parts = explode(" ", $str);
+    if (count($arr_parts) !== 2) {
+        return false;
+    }
+   
+    for ($idx = 1; $idx <= 31; $idx++) {
+        $all_days[sprintf("%02d%s", $idx, "日")] = sprintf("%02d%s", $idx);
+    } 
+
+    if (!isset($all_days[$arr_parts[0]])) {
+        return false; 
+    }
+
+    /* hh:mmの形式をチェック */
+    $ret = check_fmt_time($arr_parts[1]);
+    if ($ret === false) {
+        return false;
+    }
+
+    return array(
+        $all_days[$arr_part[0]],
+        $arr_parts[1]
+    );
+}
+
+function check_fmt_daytime($str)
+{
+    $arr_parts = explode(" ", $str);
+    if (count($arr_parts) !== 2) {
+        return false;
+    }
+
+    $day_int = check_day_in_week($arr_parts[0]);
+    if ($day_int === false) {
+        return false;
+    }
+
+    $ret = check_fmt_time($arr_parts[1]);
+    if ($ret === false) {
+        return false;
+    }
+    return array(
+        $day_int,
+        $arr_parts[1]
+    );
+}
+
+function compare_datetime($dt1, $dt2)
+{
+    $tmp_arr1 = explode(" ", $dt1); 
+    $tmp_arr2 = explode(" ", $dt2); 
+
+    if ((strtotime($tmp_arr1[0]) - strtotime($tmp_arr2[0])) >= 0) {
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * 日時の形式をチェックする
+ */
+function check_fmt_datetime($str)
+{
+    $arr_parts = explode(" ", $str);
+    if (count($arr_parts) !== 2) {
+        return false;
+    }
+
+    /* 日付の形式をチェック */
+    $ret = check_fmt_date($arr_parts[0]);
+    if ($ret === false) {
+        return false;
+    }
+
+    /* 時刻の形式をチェック */
+    $ret = check_fmt_time($arr_parts[1]);
+    if ($ret === false) {
+    }
+
+    return $str;
+}
+
+function check_day_in_week($str)
+{
+    $allow_day = array(
+        "日曜日" => 0,
+        "月曜日" => 1,
+        "火曜日" => 2,
+        "水曜日" => 3,
+        "木曜日" => 4,
+        "金曜日" => 5,
+        "土曜日" => 6,
+    );
+
+    if (!isset($allow_day[$str])) {
+        return false;
+    }
+
+    return $allow_day[$str];
+}
+
+function check_fmt_time($str)
+{
+    /* 「:」で分析 */
+    $arr_hhmm= explode(":", $str);
+    if (count($arr_hhmm) !== 2) {
+        return false;
+    }
+
+    /* 時刻のチェック */
+    if (!preg_match('/^[0-9]+$/', $arr_hhmm[0])) {
+        return false;
+    }
+     
+    /* 時刻のチェック */
+    if (!preg_match('/^[0-9]+$/', $arr_hhmm[1])) {
+        return false;
+    }
+
+    if (($arr_hhmm[0] < 0) || ($arr_hhmm[0] > 23)) {
+        return false;
+    }
+
+    if (($arr_hhmm[1] < 0) || ($arr_hhmm[1] > 59)) {
+        return false;
+    }
+
+    return $str;
+}
+
+function cal_time_diff($time1, $time2)
+{
+    return (strtotime($time1) - strtotime($time2)) / (60 * 60 * 24);
+}
+
+function getDayOfWeek($date_str)
+{
+    $w_idx = date("w", strtotime($date_str));
+    $week_name = array(
+        "日",
+        "月",
+        "火",
+        "水",
+        "木",
+        "金",
+        "土",
+    );
+    return  array($w_idx , $week_name[$w_idx]);
+}
+
+function cal_param_datetime($ta_repmode, $ta_post)
+{
+    /* 繰り返しモードをセット */
+    $data["ta_repmode"] = $ta_repmode;
+
+    /* 初回登録日時をセット */
+    $data["ta_post"]    = date(DB_TIMESTAMP_FMT,
+                          strtotime($ta_post)) ?: null;
+
+    /* 繰り返しモード*/
+    if ($ta_repmode === "0") {
+        $data["ta_repday"] = null;
+        
+    /* 毎週 */
+    } else if ($ta_repmode === "1") {
+        /* 0-6の間に値をセット */
+        $dayofweek = getDayOfWeek($ta_post);
+        $data["ta_repday"] = $dayofweek[0];
+
+    /* 毎月 */
+    } else if ($ta_repmode === "2") {
+       
+        $arr_parts = explode(" ", $ta_post);
+        $arr_date_parts = explode("/", $arr_parts[0]);
+ 
+        /* 1-31の間に値をセット */
+        /* 
+         * 注意: 例えば2/30または2/31等存在してない日の場合
+         * 該当月にタスクの登録を行わない
+         */
+        $data["ta_repday"] = $arr_date_parts[2];
+        
+    /* 毎月末 */
+    } else if ($ta_repmode === "3") {
+        /* 今月末日に設定する */
+        $data["ta_repday"] = 31;
+    }
+
+    return $data;
+}
+
+function downloadFile($attach)
+{
+    /* 添付ファイルを存在しない場合 */
+    if (!file_exists($attach["at_filepath"])) {
+        return "添付ファイルが存在していません。";
+    }
+
+    header(sprintf('Content-Type: %s', $attach["at_mimetypes"]));
+    header('Content-Disposition: attachment; filename=' . basename($attach["at_filename"]));
+    header('Content-Length: ' . filesize($attach["at_filepath"]));
+    ob_clean();
+    flush();
+    $ret = readfile($attach["at_filepath"]);
+    if ($ret === false) {
+        return "添付ファイルのダウンロードに失敗しました。";
+    }
+    exit;
+}
+
+function create_body_sendmail($filepath, $from_addr, $datetime)
+{
+    $mail_body = "";
+    $user_write = sprintf("On %s, %s wrote: \n", $datetime, $from_addr);
+
+    $fp = fopen($filepath, "r");
+    if ($fp === false) {
+        return false;
+    }
+
+    while (feof($fp) === FALSE) {
+
+        $buf = fgets($fp);
+
+        if ($buf === FALSE) {
+            break;
+        }
+
+        $mail_body .= "> " .$buf;
+    }
+
+    fclose($fp);
+
+    $mail_body = "\n\n\n" . $user_write . $mail_body;
+
+    return $mail_body;
+}
+
+function createSubjectSendmail($subject)
+{
+    $re_str = substr($subject, 0, 3);
+
+    $re_str = strtolower($re_str);
+    if ($re_str === "re:") {
+        return $subject;
+    } else {
+        return "Re:" . $subject;
+    }
+}
+
+function mimeEncodingHeader($str)
+{
+    /* < で分析 */
+    $tmpArr = explode('<', $str, 2);
+
+    /* <>を含まない形式だったらそのままアドレスとして使う */
+    if (!isset($tmpArr[1])) {
+        return $str;
+    }
+
+    /* 前半をmimeエンコード */
+    $mimeStr = mb_encode_mimeheader(
+        mb_convert_encoding(trim($tmpArr[0]), "JIS", "UTF-8")
+    );
+
+    $mimeStr .= " <$tmpArr[1]";
+    return $mimeStr;
+}
+
+function cumas_sendmail($from_addr, $to_addr, $cc_addr,
+                        $subject, $body, $ma_message_id)
+{
+    /**
+     * mb_send_mail用設定
+     * 件名はISO-2022-JPでMIMEエンコード
+     * 本文はISO-2022-JPに変換
+     */
+    mb_language("japanese");
+    mb_internal_encoding("UTF-8");
+
+    /* Toを格納配列 */
+    $arrToMimeEnc = [];
+
+    $arr_to = explode(",", $to_addr);
+
+    foreach($arr_to as $tmp_to) {
+        $arrToMimeEnc[] = mimeEncodingHeader($tmp_to);
+    }
+
+    /* 配列要素を文字列により連結する */
+    $toMimeEnc = implode(DELIMIRER_MAIL, $arrToMimeEnc);
+
+    /* Toヘッダ */
+    //$headers["To"] = "To: " . $toMimeEnc;
+
+    /* 差出人ヘッダ */
+    if (!empty($from_addr)) {
+        $fromMimeEnc = mimeEncodingHeader($from_addr);
+        $headers["From"] = "From: " . $fromMimeEnc;
+    }
+
+    /* Ccヘッダ */
+    if (!empty($cc_addr)) {
+        $arr_cc = explode(",", $cc_addr);
+
+        foreach($arr_cc as $tmp_cc) {
+            $arrCcMimeEnc[] = mimeEncodingHeader($tmp_cc);
+        }
+
+        $headers["Cc"] = "Cc: " . implode(",", $arrCcMimeEnc);;
+    }
+
+    /* referenceヘッダ */
+    if (!empty($ma_message_id)) {
+        $headers["references"] = "References: $ma_message_id";
+    }
+
+    /* エンコード変換を行ってメールを送信 */
+    $ret = mb_send_mail($toMimeEnc, $subject, $body,
+               implode("\r\n", $headers));
+
+    return $ret;
+}
+
+function mkRandomString($length = 10)
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
+function mkMsgID()
+{
+    global $config;
+    $rdstr = mkRandomString();
+    $nowtime = date("YmjHis"); 
+    return sprintf("%s.%s%s@%s",
+        $nowtime,
+        getmypid(),
+        $rdstr,
+        $config->hostname
+    );
+}
+
+function httpPost($url, $data)
+{
+    $input_html = "";
+    foreach ($data as $key => $value) {
+        $input_html .= sprintf('<input name="%s" value="%s">', $key, $value);
+    }
+
+    print
+    '<body onload="document.hidden_form.submit()">   
+        <form method="POST" action="' . $url  . '" name="hidden_form" style="display:none">
+        ' . $input_html . '
+        </form>
+     </body>';
+}
+
+function check_other_process($argv)
+{
+    // grepするコマンドの名前
+    $check_cmd = "\"$argv[0]\"";
+
+    // 現在のPIDを取得
+    $pid = getmypid();
+    if ($pid === FALSE) {
+        return FALSE;
+    }
+
+    // psコマンドでプロセスを確認
+    $proc_ret = `/bin/ps -eo pid,args |
+                 /bin/egrep $check_cmd |
+                 /bin/egrep -v "^ *$pid " |
+                 /bin/grep -v "grep -E"`;
+
+    if (isset($proc_ret)) {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+?>

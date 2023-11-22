@@ -1,0 +1,25 @@
+#main div {
+    width: 500px;
+}
+
+#main h3 {
+    margin-top: 10px;
+}
+
+#main th {
+    text-align: right;
+    border: hidden;
+}
+#main td {
+    padding-left: 5px;
+    border: hidden;
+}
+
+.buttons {
+  padding-top: 10px;
+  text-align: center;
+}
+
+.buttons input {
+  width: 100px;
+}
